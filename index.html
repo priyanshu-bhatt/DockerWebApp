@@ -1,0 +1,184 @@
+<html>
+        <head>
+
+<script>
+        function run() {
+                        var cn= document.getElementById("contname").value;
+                        var ci= document.getElementById("contimg").value;
+                        const xhttp = new XMLHttpRequest();
+                        xhttp.onload = function() {
+                        document.getElementById("running").innerHTML = this.responseText;
+                                }
+                        //xhttp.open("GET","http://13.234.114.26:3000/ps");
+                        xhttp.open("GET","http://3.110.130.25:3000/run?cname=" + cn + "&cimage="+ ci);
+                        xhttp.send(); 
+        }
+
+        function ps() {
+                      const xhttp = new XMLHttpRequest();
+                       xhttp.onload = function() {
+                      document.getElementById("pscontent").innerHTML = this.responseText;
+                                           }
+                         xhttp.open("GET","http://3.110.130.25:3000/ps");
+                         xhttp.send(); 
+                }
+
+         function remove() {
+                       const cn=document.getElementById("contname1").value;
+                      const xhttp = new XMLHttpRequest();
+                       xhttp.onload = function() {
+                      document.getElementById("removecontent").innerHTML = this.responseText;
+                                           }
+                        xhttp.open("GET","http://3.110.130.25:3000/delete?cname="+cn);
+                         xhttp.send(); 
+                }
+
+
+         function dockfile() {
+                         const content= document.getElementById("file").value;
+                      const xhttp = new XMLHttpRequest();
+                       xhttp.onload = function() {
+                      document.getElementById("filearea").innerHTML =  this.responseText;
+                                           }
+                        xhttp.open("GET","http://3.110.130.25:3000/dockerfile?dfile="+content);
+                         xhttp.send(); 
+                }
+ function buildpush() {
+                         const username= document.getElementById("user").value;
+                         const password=prompt("Enter password")
+                         const imagename=document.getElementById("imagetag").value;
+                         const version_number=document.getElementById("version_n").value;
+                      const xhttp = new XMLHttpRequest();
+                       xhttp.onload = function() {
+                      document.getElementById("push").innerHTML =  this.responseText;
+                                           }
+                        xhttp.open("GET","http://3.110.130.25:3000/buildpush?username="+username + "&password="+ password + "&imagename="+imagename + "&version=" + version_number);
+                         xhttp.send(); 
+                }
+
+         function contimages() {
+                      const xhttp = new XMLHttpRequest();
+                       xhttp.onload = function() {
+                      document.getElementById("images").innerHTML = this.responseText;
+                                           }
+                         xhttp.open("GET","http://3.110.130.25:3000/images");
+                         xhttp.send(); 
+                }
+        function basiclinux() {
+                        const cmd = document.getElementById("command").value;
+                      const xhttp = new XMLHttpRequest();
+                       xhttp.onload = function() {
+                      document.getElementById("linux").innerHTML = this.responseText;
+                                           }
+                         xhttp.open("GET","http://3.110.130.25:3000/linux?command"+cmd);
+                         xhttp.send(); 
+                }
+
+
+
+
+        //fucntion start from here
+
+function getScrollHeight(elm){
+  var savedValue = elm.value
+  elm.value = ''
+  elm._baseScrollHeight = elm.scrollHeight
+  elm.value = savedValue
+}
+function onExpandableTextareaInput({ target:elm }){
+  // make sure the input event originated from a textarea and it's desired to be auto-expandable
+  if( !elm.classList.contains('autoExpand') || !elm.nodeName == 'TEXTAREA' ) return
+
+  var minRows = elm.getAttribute('data-min-rows')|0, rows;
+  !elm._baseScrollHeight && getScrollHeight(elm)
+
+  elm.rows = minRows
+  rows = Math.ceil((elm.scrollHeight - elm._baseScrollHeight) / 16)
+  elm.rows = minRows + rows
+}
+
+
+// global delegated event listener
+document.addEventListener('input', onExpandableTextareaInput)
+
+
+
+
+                </script>
+
+
+
+
+
+        </head>
+        <body>
+<style>
+textarea{
+  display: block;
+  box-sizing: padding-box;
+  overflow: hidden;
+
+  padding: 1px;
+  width: 600px;
+  font-size: 14px;
+  margin: 50px auto;
+  border-radius: 6px;
+  box-shadow: 2px 2px 8px rgba(black, .3);
+  border: 0;
+
+  &:focus{
+    border: none;
+    outline: none;
+  }
+}
+  HTML{
+                                background:black;
+                                color:white
+                        }
+</style>
+
+<h1> Launch Container </h1>
+
+Name <input name="cname" id="contname" /><br />
+<br />
+Image <select name="cimage" id="contimg">
+        <option selected="true" disabled="disabled">Select Image</option>
+        <option> centos </option>
+        <option> ubuntu </option>
+        <option>python</option>
+        <option>node<option>
+</select>
+<br />
+<button onclick="run()">Click Me to run container</button><br />
+
+Delete Container name <input name="cname" id="contname1" /><br />
+<button onclick="remove()">click me to remove container</button>
+
+
+ 
+<h1> Create Basic Dockerfile </h1>
+<br />
+
+<textarea class='autoExpand' name="dfile"  id="file" rows="3"   data-min-rows='3' placeholder='Auto-Expanding Textarea' autofocus></textarea>
+Enter username <input name="username" id="user" /><br/>
+Enter imagename <input name="imagename" id="imagetag" /><br/>
+Enter version Number <input name="version" id="version_n" /><br />
+<h3>
+<button onclick="dockfile()">Click to create dockerfile</button>
+<button onclick="buildpush()">Click me to build and push image</button> <br />
+
+<h1>RUN linux Commands </h1>
+[@root -->]<input name="command"  id="command"/>
+<button onclick="basiclinux()">Run command</button><br />
+<div id="linux">linux here</div>
+<div id="push">Build push area</div>
+<div id="running">Running id here</div>
+<div id="pscontent">Content ps come here</div>
+<div id="removecontent">Remove container </div>
+<div id="filearea">Dockerfile success</div>
+<div id="images">Images here </div>
+<button onclick="ps()">Click me to refresh</button>
+
+<button onclick="contimages()">Click to see images</button>
+        </body>
+        </html>
